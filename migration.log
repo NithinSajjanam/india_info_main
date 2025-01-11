@@ -1,0 +1,57 @@
+2025-01-03 18:49:41,187 [INFO] Connecting to MongoDB...
+2025-01-03 18:50:02,845 [ERROR] Migration failed: The resolution lifetime expired after 21.608 seconds: Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.
+2025-01-03 18:50:02,846 [CRITICAL] Critical failure: The resolution lifetime expired after 21.608 seconds: Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.
+2025-01-03 18:52:19,217 [INFO] Connecting to MongoDB...
+2025-01-03 18:52:40,900 [ERROR] Migration failed: The resolution lifetime expired after 21.605 seconds: Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.
+2025-01-03 18:52:40,901 [CRITICAL] Critical failure: The resolution lifetime expired after 21.605 seconds: Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.; Server Do53:202.88.152.8@53 answered The DNS operation timed out.; Server Do53:202.88.152.10@53 answered The DNS operation timed out.
+2025-01-03 19:07:12,950 [INFO] Connecting to the PostgreSQL database...
+2025-01-03 19:07:14,385 [INFO] Connected to the database successfully.
+2025-01-03 19:07:14,386 [INFO] Reading CSV file: panchayat_data_with_members.csv
+2025-01-03 19:07:14,678 [ERROR] Error reading CSV file: Error tokenizing data. C error: Expected 13 fields in line 240840, saw 25
+
+2025-01-03 19:07:14,678 [ERROR] Migration failed: Error tokenizing data. C error: Expected 13 fields in line 240840, saw 25
+
+2025-01-03 19:07:14,678 [CRITICAL] Critical failure: Error tokenizing data. C error: Expected 13 fields in line 240840, saw 25
+
+2025-01-03 19:08:27,127 [INFO] Connecting to the PostgreSQL database...
+2025-01-03 19:08:27,175 [INFO] Connected to the database successfully.
+2025-01-03 19:08:27,175 [INFO] Reading CSV file: panchayat_data_with_members.csv
+2025-01-03 19:08:27,690 [INFO] Preparing DataFrame for database insertion.
+2025-01-03 19:08:27,690 [INFO] Starting data migration...
+2025-01-03 19:08:27,954 [ERROR] Error inserting chunk into database: (psycopg2.OperationalError) could not translate host name "db.wrzghifymvmmflemjpnd.supabase.co" to address: nodename nor servname provided, or not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-01-03 19:08:27,954 [ERROR] Migration failed: (psycopg2.OperationalError) could not translate host name "db.wrzghifymvmmflemjpnd.supabase.co" to address: nodename nor servname provided, or not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-01-03 19:08:27,954 [CRITICAL] Critical failure: (psycopg2.OperationalError) could not translate host name "db.wrzghifymvmmflemjpnd.supabase.co" to address: nodename nor servname provided, or not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-01-03 19:08:43,950 [INFO] Connecting to the PostgreSQL database...
+2025-01-03 19:08:43,996 [INFO] Connected to the database successfully.
+2025-01-03 19:08:43,996 [INFO] Reading CSV file: panchayat_data_with_members.csv
+2025-01-03 19:08:44,494 [INFO] Preparing DataFrame for database insertion.
+2025-01-03 19:08:44,494 [INFO] Starting data migration...
+2025-01-03 19:08:44,515 [ERROR] Error inserting chunk into database: (psycopg2.OperationalError) could not translate host name "db.wrzghifymvmmflemjpnd.supabase.co" to address: nodename nor servname provided, or not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-01-03 19:08:44,515 [ERROR] Migration failed: (psycopg2.OperationalError) could not translate host name "db.wrzghifymvmmflemjpnd.supabase.co" to address: nodename nor servname provided, or not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-01-03 19:08:44,515 [CRITICAL] Critical failure: (psycopg2.OperationalError) could not translate host name "db.wrzghifymvmmflemjpnd.supabase.co" to address: nodename nor servname provided, or not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-01-03 19:41:09,056 [INFO] Connecting to the PostgreSQL database...
+2025-01-03 19:41:09,102 [INFO] Connected to the database successfully.
+2025-01-03 19:41:09,102 [INFO] Reading CSV file: panchayat_data_with_members.csv
+2025-01-03 19:41:09,571 [INFO] Preparing DataFrame for database insertion.
+2025-01-03 19:41:09,571 [INFO] Starting data migration...
+2025-01-03 19:41:09,596 [ERROR] Error inserting chunk into database: (psycopg2.OperationalError) could not translate host name "db.wrzghifymvmmflemjpnd.supabase.co" to address: nodename nor servname provided, or not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-01-03 19:41:09,596 [ERROR] Migration failed: (psycopg2.OperationalError) could not translate host name "db.wrzghifymvmmflemjpnd.supabase.co" to address: nodename nor servname provided, or not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-01-03 19:41:09,596 [CRITICAL] Critical failure: (psycopg2.OperationalError) could not translate host name "db.wrzghifymvmmflemjpnd.supabase.co" to address: nodename nor servname provided, or not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)

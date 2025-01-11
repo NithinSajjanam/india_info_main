@@ -1,0 +1,4 @@
+Flask>=2.2.5
+pandas>=1.5.3
+typing-extensions>=4.5.0
+psycopg2

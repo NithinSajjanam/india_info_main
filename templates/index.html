@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panchayat Member Directory</title>
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!--Favicon for this site -->
+		<link rel="icon" href="favicon.png">
+    <style>
+        :root {
+            --primary: #499eff;
+            --secondary: #61eb59;
+            --dark: #66717b;
+            --light: #F7F9F9;
+            --primary: #3498db;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --background-day: #ffffff;
+            --background-night: #2c3e50;
+            --text-day: #2c3e50;
+            --text-night: #ecf0f1;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: #e9e3e3;
+            margin: 0;
+            padding: 20px;
+        }
+
+        body.day-mode {
+            background-color: var(--background-day);
+            color: var(--text-day);
+        }
+
+        body.night-mode {
+            background-color: var(--background-night);
+            color: var(--text-night);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .title {
+            margin: 0;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-container {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--dark);
+            border-radius: 6px;
+            font-size: 16px;
+            background: white;
+            box-shadow: 4px 4px 0px var(--dark);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .search-results-container {
+            position: absolute;
+            background: white;
+            border: 2px solid var(--dark);
+            border-radius: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+            width: 100%;
+            z-index: 1100;
+            box-shadow: 4px 4px 0px var(--dark);
+            margin-top: 5px;
+        }
+
+        .selection-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .select-box {
+            background: white;
+            border: 3px solid var(--dark);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 5px 5px 0px var(--dark);
+            transition: transform 0.2s;
+        }
+
+        .select-box:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 7px 7px 0px var(--dark);
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--dark);
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .member-card {
+            background: white;
+            border: 3px solid var(--dark);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 5px 5px 0px var(--primary);
+        }
+
+        .member-card h3 {
+            margin: 0;
+            color: var(--primary);
+            border-bottom: 2px solid var(--dark);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .member-info {
+            margin: 5px 0;
+            color: var(--dark);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2rem;
+            color: var(--dark);
+        }
+
+        .add-button {
+            background: var(--primary);
+            color: white;
+            border: 3px solid var(--dark);
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 5px 5px 0px var(--dark);
+            transition: transform 0.2s;
+            margin: 20px 0;
+        }
+
+        .add-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 7px 7px 0px var(--dark);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 20px auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            border: 3px solid var(--dark);
+            border-radius: 8px;
+            box-shadow: 8px 8px 0px var(--dark);
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close-button {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--dark);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .submit-button {
+            background: var(--secondary);
+            color: var(--dark);
+            border: 3px solid var(--dark);
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--dark);
+            transition: transform 0.2s;
+            width: 100%;
+        }
+
+        .submit-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--dark);
+        }
+
+        .search-result-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-result-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .quick-access-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 0 auto 30px auto;
+            padding: 20px;
+        }
+
+        .bengaluru-button {
+            background: var(--secondary);
+            color: var(--dark);
+            border: 3px solid var(--dark);
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 5px 5px 0px var(--dark);
+            transition: transform 0.2s;
+            min-width: 200px;
+        }
+
+        .bengaluru-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 7px 7px 0px var(--dark);
+        }
+
+        .famous-cities-title {
+            text-align: center;
+            margin: 20px 0;
+            color: var();
+        }
+
+        .search-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        #search-input {
+            padding: 10px;
+            font-size: 1rem;
+            border: 2px solid var(--dark);
+            border-radius: 4px;
+            width: 200px;
+        }
+
+        #search-button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--primary);
+            color: white;
+            cursor: pointer;
+        }
+
+        #search-button:hover {
+            background-color: var(--dark);
+        }
+
+        .mode-toggle {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        #toggle-button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--primary);
+            color: white;
+            cursor: pointer;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+
+        #toggle-button:hover {
+            background-color: var(--dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="mode-toggle">
+        <button id="toggle-button">
+            <i class="fas fa-moon" id="icon-moon"></i>
+            <i class="fas fa-sun" id="icon-sun" style="display: none;"></i>
+        </button>
+    </div>
+    <div class="container">
+        <div class="header-container">
+            <h1 class="title">Panchayat Member's</h1>
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    id="globalSearch" 
+                    class="search-input" 
+                    placeholder="Search state, district, taluk, village...">
+                <div id="searchResults" class="search-results-container" style="display: none;">
+                </div>
+            </div>
+        </div>
+        <h3 class="famous-cities-title">Famous Cities</h3>
+        
+        
+        
+
+        <div class="selection-container">
+            <div class="select-box">
+                <select id="stateSelect" onchange="loadDistricts()">
+                    <option value="">Select State</option>
+                </select>
+            </div>
+            <div class="select-box">
+                <select id="districtSelect" onchange="loadTaluks()" disabled>
+                    <option value="">Select District</option>
+                </select>
+            </div>
+            <div class="select-box">
+                <select id="talukSelect" onchange="loadVillages()" disabled>
+                    <option value="">Select Taluk</option>
+                </select>
+            </div>
+            <div class="select-box">
+                <select id="villageSelect" onchange="loadMembers()" disabled>
+                    <option value="">Select Village</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="membersContainer" class="members-grid"></div>
+
+        <div class="add-member-section">
+            <button onclick="showAddForm()" class="add-button">Add New Member</button>
+        </div>
+
+        <!-- Add Member Form Modal -->
+        <div id="addMemberModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" onclick="hideAddForm()">&times;</span>
+                <h2>Add New Member</h2>
+                <form id="addMemberForm" onsubmit="submitMember(event)">
+                    <div class="form-group">
+                        <label for="newState">State*</label>
+                        <select id="newState" required onchange="loadNewDistricts()">
+                            <option value="">Select State</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="newDistrict">District*</label>
+                        <select id="newDistrict" required onchange="loadNewTaluks()">
+                            <option value="">Select District</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="newTaluk">Taluk*</label>
+                        <select id="newTaluk" required onchange="loadNewVillages()">
+                            <option value="">Select Taluk</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="newVillage">Village*</label>
+                        <select id="newVillage" required>
+                            <option value="">Select Village</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberName">Name*</label>
+                        <input type="text" id="memberName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberRole">Role*</label>
+                        <input type="text" id="memberRole" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberPhone">Phone</label>
+                        <input type="tel" id="memberPhone" pattern="[0-9]{10}">
+                    </div>
+                    <div class="form-group">
+                        <label for="memberEmail">Email</label>
+                        <input type="email" id="memberEmail">
+                    </div>
+                    <button type="submit" class="submit-button">Add Member</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', loadStates);
+
+        async function loadStates() {
+            try {
+                const response = await fetch('/api/states');
+                const states = await response.json();
+                const stateSelect = document.getElementById('stateSelect');
+                states.forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state.state_code;
+                    option.textContent = state.state;
+                    stateSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading states:', error);
+            }
+        }
+
+        async function loadDistricts() {
+            const stateCode = document.getElementById('stateSelect').value;
+            const districtSelect = document.getElementById('districtSelect');
+            resetSelects(['districtSelect', 'talukSelect', 'villageSelect']);
+            if (!stateCode) return;
+            try {
+                const response = await fetch(`/api/districts/${stateCode}`);
+                const districts = await response.json();
+                districtSelect.innerHTML = '<option value="">Select District</option>';
+                districts.forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district.district_code;
+                    option.textContent = district.district;
+                    districtSelect.appendChild(option);
+                });
+                districtSelect.disabled = false;
+            } catch (error) {
+                console.error('Error loading districts:', error);
+            }
+        }
+
+        async function loadTaluks() {
+            const districtCode = document.getElementById('districtSelect').value;
+            const talukSelect = document.getElementById('talukSelect');
+            resetSelects(['talukSelect', 'villageSelect']);
+            if (!districtCode) return;
+            try {
+                const response = await fetch(`/api/taluks/${districtCode}`);
+                const taluks = await response.json();
+                talukSelect.innerHTML = '<option value="">Select Taluk</option>';
+                taluks.forEach(taluk => {
+                    const option = document.createElement('option');
+                    option.value = taluk.taluk_code;
+                    option.textContent = taluk.taluk;
+                    talukSelect.appendChild(option);
+                });
+                talukSelect.disabled = false;
+            } catch (error) {
+                console.error('Error loading taluks:', error);
+            }
+        }
+
+        async function loadVillages() {
+            const talukCode = document.getElementById('talukSelect').value;
+            const villageSelect = document.getElementById('villageSelect');
+            resetSelects(['villageSelect']);
+            if (!talukCode) return;
+            try {
+                const response = await fetch(`/api/villages/${talukCode}`);
+                const villages = await response.json();
+                villageSelect.innerHTML = '<option value="">Select Village</option>';
+                villages.forEach(village => {
+                    const option = document.createElement('option');
+                    option.value = village.village_code;
+                    option.textContent = village.village;
+                    villageSelect.appendChild(option);
+                });
+                villageSelect.disabled = false;
+            } catch (error) {
+                console.error('Error loading villages:', error);
+            }
+        }
+
+        async function loadMembers() {
+            const villageCode = document.getElementById('villageSelect').value;
+            const membersContainer = document.getElementById('membersContainer');
+            if (!villageCode) {
+                membersContainer.innerHTML = '';
+                return;
+            }
+            try {
+                membersContainer.innerHTML = '<div class="loading">Loading members...</div>';
+                const response = await fetch(`/api/members?village_code=${villageCode}`);
+                const members = await response.json();
+                membersContainer.innerHTML = '';
+                members.forEach(member => {
+                    const memberCard = document.createElement('div');
+                    memberCard.className = 'member-card';
+                    memberCard.innerHTML = `
+                        <h3>${member.name}</h3>
+                        <p class="member-info"><strong>Role:</strong> ${member.role}</p>
+                        <p class="member-info"><strong>Phone:</strong> ${member.phone || 'N/A'}</p>
+                        <p class="member-info"><strong>Email:</strong> ${member.email || 'N/A'}</p>
+                        <p class="member-info"><strong>Village:</strong> ${member.village}</p>
+                        <p class="member-info"><strong>Taluk:</strong> ${member.taluk}</p>
+                    `;
+                    membersContainer.appendChild(memberCard);
+                });
+                if (members.length === 0) {
+                    membersContainer.innerHTML = '<div class="loading">No members found</div>';
+                }
+            } catch (error) {
+                console.error('Error loading members:', error);
+                membersContainer.innerHTML = '<div class="loading">Error loading members</div>';
+            }
+        }
+
+        function resetSelects(selectIds) {
+            selectIds.forEach(id => {
+                const sel = document.getElementById(id);
+                sel.innerHTML = `<option value="">Select ${id.replace('Select', '')}</option>`;
+                sel.disabled = true;
+            });
+            if (selectIds.includes('villageSelect')) {
+                document.getElementById('membersContainer').innerHTML = '';
+            }
+        }
+
+        function showAddForm() {
+            document.getElementById('addMemberModal').style.display = 'block';
+            loadStatesForForm();
+        }
+
+        function hideAddForm() {
+            document.getElementById('addMemberModal').style.display = 'none';
+        }
+
+        async function loadStatesForForm() {
+            const response = await fetch('/api/states');
+            const states = await response.json();
+            const stateSelect = document.getElementById('newState');
+            stateSelect.innerHTML = '<option value="">Select State</option>';
+            states.forEach(state => {
+                const option = document.createElement('option');
+                option.value = state.state_code;
+                option.textContent = state.state;
+                stateSelect.appendChild(option);
+            });
+        }
+
+        async function loadNewDistricts() {
+            const stateCode = document.getElementById('newState').value;
+            const response = await fetch(`/api/districts/${stateCode}`);
+            const districts = await response.json();
+            const districtSelect = document.getElementById('newDistrict');
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+            districts.forEach(district => {
+                const option = document.createElement('option');
+                option.value = district.district_code;
+                option.textContent = district.district;
+                districtSelect.appendChild(option);
+            });
+        }
+
+        async function loadNewTaluks() {
+            const districtCode = document.getElementById('newDistrict').value;
+            const response = await fetch(`/api/taluks/${districtCode}`);
+            const taluks = await response.json();
+            const talukSelect = document.getElementById('newTaluk');
+            talukSelect.innerHTML = '<option value="">Select Taluk</option>';
+            taluks.forEach(taluk => {
+                const option = document.createElement('option');
+                option.value = taluk.taluk_code;
+                option.textContent = taluk.taluk;
+                talukSelect.appendChild(option);
+            });
+        }
+
+        async function loadNewVillages() {
+            const talukCode = document.getElementById('newTaluk').value;
+            const response = await fetch(`/api/villages/${talukCode}`);
+            const villages = await response.json();
+            const villageSelect = document.getElementById('newVillage');
+            villageSelect.innerHTML = '<option value="">Select Village</option>';
+            villages.forEach(village => {
+                const option = document.createElement('option');
+                option.value = village.village_code;
+                option.textContent = village.village;
+                villageSelect.appendChild(option);
+            });
+        }
+
+        async function submitMember(event) {
+            event.preventDefault();
+            const formData = {
+                village_code: document.getElementById('newVillage').value,
+                name: document.getElementById('memberName').value,
+                role: document.getElementById('memberRole').value,
+                phone: document.getElementById('memberPhone').value,
+                email: document.getElementById('memberEmail').value
+            };
+            try {
+                const response = await fetch('/api/members/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                if (response.ok) {
+                    alert('Member added successfully!');
+                    hideAddForm();
+                    if (document.getElementById('villageSelect').value === formData.village_code) {
+                        loadMembers();
+                    }
+                } else {
+                    const errMsg = await response.json();
+                    alert('Error adding member: ' + errMsg.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error adding member. Please try again.');
+            }
+        }
+
+        // Debounced global search for states, districts, taluks, and villages
+        let debounceTimer;
+        document.getElementById('globalSearch').addEventListener('input', function(e) {
+            clearTimeout(debounceTimer);
+            const searchTerm = e.target.value;
+            if (searchTerm.length < 2) {
+                document.getElementById('searchResults').style.display = 'none';
+                return;
+            }
+            debounceTimer = setTimeout(() => {
+                fetch(`/api/search?term=${encodeURIComponent(searchTerm)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const resultsContainer = document.getElementById('searchResults');
+                        resultsContainer.innerHTML = '';
+                        if (data.results && data.results.length > 0) {
+                            data.results.forEach(result => {
+                                const div = document.createElement('div');
+                                div.className = 'search-result-item';
+                                div.textContent = 
+                                    `${result.state} -> ${result.district} -> ${result.taluk} -> ${result.village}`;
+                                div.addEventListener('click', () => {
+                                    resultsContainer.style.display = 'none';
+                                    autoSelectSearchResult(result);
+                                });
+                                resultsContainer.appendChild(div);
+                            });
+                            resultsContainer.style.display = 'block';
+                        } else {
+                            resultsContainer.style.display = 'none';
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Search error:', err);
+                    });
+            }, 300);
+        });
+
+        // Automatically set all dropdowns from a search item
+        function autoSelectSearchResult(item) {
+            const { state_code, district_code, taluk_code, village_code } = item;
+            const stateSelect = document.getElementById('stateSelect');
+            for (let i = 0; i < stateSelect.options.length; i++) {
+                if (stateSelect.options[i].value == state_code) {
+                    stateSelect.selectedIndex = i;
+                    stateSelect.dispatchEvent(new Event('change'));
+                    break;
+                }
+            }
+            // Wait for districts to load, then set district
+            setTimeout(() => {
+                const districtSelect = document.getElementById('districtSelect');
+                for (let i = 0; i < districtSelect.options.length; i++) {
+                    if (districtSelect.options[i].value == district_code) {
+                        districtSelect.selectedIndex = i;
+                        districtSelect.dispatchEvent(new Event('change'));
+                        break;
+                    }
+                }
+                // Wait for taluks to load, then set taluk
+                setTimeout(() => {
+                    const talukSelect = document.getElementById('talukSelect');
+                    for (let i = 0; i < talukSelect.options.length; i++) {
+                        if (talukSelect.options[i].value == taluk_code) {
+                            talukSelect.selectedIndex = i;
+                            talukSelect.dispatchEvent(new Event('change'));
+                            break;
+                        }
+                    }
+                    // Wait for villages to load, then set village
+                    setTimeout(() => {
+                        const villageSelect = document.getElementById('villageSelect');
+                        for (let i = 0; i < villageSelect.options.length; i++) {
+                            if (villageSelect.options[i].value == village_code) {
+                                villageSelect.selectedIndex = i;
+                                villageSelect.dispatchEvent(new Event('change'));
+                                break;
+                            }
+                        }
+                    }, 500);
+                }, 500);
+            }, 500);
+        }
+
+        // Close search results when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.matches('#globalSearch')) {
+                document.getElementById('searchResults').style.display = 'none';
+            }
+        });
+
+        async function quickSearch(searchTerm) {
+            try {
+                const response = await fetch(`/api/search?term=${encodeURIComponent(searchTerm)}`);
+                const data = await response.json();
+                
+                if (data.results && data.results.length > 0) {
+                    // Auto-select the first result
+                    autoSelectSearchResult(data.results[0]);
+                } else {
+                    alert('No results found for ' + searchTerm);
+                }
+            } catch (err) {
+                console.error('Search error:', err);
+                alert('Error performing search');
+            }
+        }
+
+        document.getElementById('search-button').addEventListener('click', function() {
+            const searchTerm = document.getElementById('search-input').value;
+            if (searchTerm) {
+                // Perform search action, e.g., make an API call
+                console.log('Searching for:', searchTerm);
+                // You can replace the console.log with an actual search function
+            }
+        });
+
+        document.getElementById('toggle-button').addEventListener('click', function() {
+            var moonIcon = document.getElementById('icon-moon');
+            var sunIcon = document.getElementById('icon-sun');
+            if (moonIcon.style.display === 'none') {
+                moonIcon.style.display = 'inline';
+                sunIcon.style.display = 'none';
+            } else {
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'inline';
+            }
+        });
+    </script>
+    <!-- Add this script at the end of the body tag -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButton = document.getElementById('toggle-button');
+            const body = document.body;
+
+            toggleButton.addEventListener('click', function() {
+                if (body.classList.contains('day-mode')) {
+                    body.classList.remove('day-mode');
+                    body.classList.add('night-mode');
+                    toggleButton.innerHTML = '<i class="fas fa-sun"></i> Switch to Day Mode';
+                } else {
+                    body.classList.remove('night-mode');
+                    body.classList.add('day-mode');
+                    toggleButton.innerHTML = '<i class="fas fa-moon"></i> Switch to Night Mode';
+                }
+            });
+
+            // Set initial mode
+            body.classList.add('day-mode');
+        });
+    </script>
+</body>
+</html>
